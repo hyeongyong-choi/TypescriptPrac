@@ -1,65 +1,96 @@
-
-//Class 키워드
+"use strict";
+// class Player {
+//     public readonly first: string;
+//     public readonly last:string;
+//     private score:number = 0;
+//     constructor(first: string , last: string){
+//         this.first = first;
+//         this.last = last;
+//     }
+//     secretMethod():void {
+//         console.log("SECRET METHOD!!")
+//     }
+// }
+//파라미터 프로퍼티 단축 구문
 class Player {
-    //클래스 필드
-    #score = 0; //#기호를 통해 프라이빗 필드로 만들 수 있다.
-    numLives = 10;
-    constructor(first,last){
+    constructor(first, last, _score) {
         this.first = first;
-        this.last = last;        
+        this.last = last;
+        this._score = _score;
     }
-    static randomPlayer(){
-        return new Player("Andy", "Samberg")
+    secretMethod() {
+        console.log("SECRET METHOD!!");
     }
-    get score(){
-        return this.#score
-    }
-
-    set score(newScore){
-        if(newScore < 0){
-            throw new Error("Score must be positive!!")
-        }
-        this.#score = newScore
-    }
-
-    get fullName(){
+    get fullName() {
         return `${this.first} ${this.last}`;
     }
-    set fullName(newName){
-        const [first,last] = newName.split(" ")
+    get score() {
+        return this._score;
+    }
+    set score(newScore) {
+        if (newScore < 0) {
+            throw new Error("Score cannot be negative!");
+        }
+        this._score = newScore;
+    }
+}
+class SuperPlayer extends Player {
+    constructor() {
+        super(...arguments);
+        this.isAdmin = true;
+    }
+    maxScore() {
+        this._score = 999999;
+    }
+}
+const elton = new Player("Elton", "Steele", 100);
+elton.secretMethod();
+class Bike {
+    constructor(color) {
+        this.color = color;
+    }
+}
+class Jacket {
+    constructor(brand, color) {
+        this.brand = brand;
+        this.color = color;
+    }
+    print() {
+        console.log(`${this.color}`);
+    }
+}
+const bike1 = new Bike("red");
+const jacket = new Jacket("Prada", "black");
+//abstract는 인스턴스화는 못하지만, 메서드를 필수로 표시해 자식 클래스가 해당 메서드를 반드시 시행하도록 설정할 수 있습니다.
+class Employee {
+    constructor(first, last) {
         this.first = first;
         this.last = last;
     }
-
-    // updateScore(newScore){
-    //     this.#scroe = newScore
-    // }
-    taunt(){
-        console.log("BOOYAH!!")
-    }
-    loseLife(){
-        this.numLives -= 1
+    greet() {
+        console.log("HELLO!");
     }
 }
-
-//클래스 확장
-class AdminPlayer extends Player{
-    constructor(first,last,powers){
+class FullTimeEmployee extends Employee {
+    constructor(first, last, salary) {
         super(first, last);
-        this.powers = powers;
+        this.salary = salary;
     }
-    isAdmib = true;
+    getPay() {
+        return this.salary;
+    }
 }
-const admin = new AdminPlayer("admin", "mCadmin", ["delete","restore world"]);
-
-// const player1 = new Player("blue","steele");
-
-// console.log(player1.fullName)
-// console.log(player1.score)
-
-// console.log(player1.fullName);
-// player1.fullName = "Amy Adams"
-// console.log(player1.fullName);
-
-// const player2 = new Player("charlie","brown");
-// player2.taunt();
+class PartTimeEmployee extends Employee {
+    constructor(first, last, hourlyRate, hoursWorked) {
+        super(first, last);
+        this.hourlyRate = hourlyRate;
+        this.hoursWorked = hoursWorked;
+    }
+    getPay() {
+        return this.hourlyRate * this.hoursWorked;
+    }
+}
+const betty = new FullTimeEmployee("Betty", "White", 95000);
+console.log(betty.getPay());
+const bill = new PartTimeEmployee("Bill", "Billerson", 24, 1100);
+console.log(bill.getPay());
